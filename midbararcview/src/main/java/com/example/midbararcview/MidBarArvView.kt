@@ -29,3 +29,45 @@ fun Int.inverse() : Float = 1f / this
 fun Float.maxScale(i : Int, n : Int) : Float = Math.max(0f, this - i * n.inverse())
 fun Float.divideScale(i : Int, n : Int) : Float = Math.min(n.inverse(), maxScale(i, n)) * n
 fun Float.sinify() : Float = Math.sin(this * Math.PI).toFloat()
+
+fun Canvas.drawMidBarArc(scale : Float, w : Float, h : Float, paint : Paint) {
+    val barSize : Float = Math.min(w, h) / barSizeFactor
+    val r : Float = Math.min(w, h) / rFactor
+    val sf : Float = scale.sinify()
+    val sf1 : Float = sf.divideScale(0, parts)
+    val sf2 : Float = sf.divideScale(1, parts)
+    val sf3 : Float = sf.divideScale(2, parts)
+    save()
+    translate(w / 2, h / 2)
+    for (j in 0..1) {
+        save()
+        scale(1f - 2 * j, 1f - 2 * j)
+        drawRect(
+            RectF(
+                (w / 2 - barSize),
+                -h / 2,
+                w / 2,
+                -h / 2 + h * sf1
+            ),
+            paint
+        )
+        drawRect(
+            RectF(
+                - w / 2 + barSize,
+                -h / 2,
+                - w / 2 + barSize + (w - 2 * barSize) * sf2,
+                -h / 2 + barSize
+            ), paint
+        )
+        restore()
+    }
+    drawArc(RectF(-r, -r, r, r), 0f, 360f * sf3, true, paint)
+    restore()
+}
+
+fun Canvas.drawMBANode(i : Int, scale : Float, paint : Paint) {
+    val w : Float = width.toFloat()
+    val h : Float = height.toFloat()
+    paint.color = colors[i]
+    drawMidBarArc(scale, w, h, paint)
+}
