@@ -1,0 +1,3 @@
+include ':midbararcview'
+include ':app'
+rootProject.name = "LinkedMidBarArcView"
