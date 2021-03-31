@@ -221,4 +221,13 @@ class MidBarArcView(ctx : Context) : View(ctx) {
             }
         }
     }
+
+    companion object {
+
+        fun create(activity : Activity) : MidBarArcView {
+            val view : MidBarArcView = MidBarArcView(activity)
+            activity.setContentView(view)
+            return view
+        }
+    }
 }
